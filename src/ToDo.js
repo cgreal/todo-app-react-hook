@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import axios from "axios";
+import PropTypes from "prop-types";
 class Todo extends Component {
   constructor(props) {
     super(props);
@@ -10,44 +11,60 @@ class Todo extends Component {
       mockData: [
         {
           id: "1",
-          title: "Default todo list item",
-          done: false,
+          title: "",
+          done: null,
           date: new Date()
         }
       ]
     };
+    this.getToDoItem = this.getToDoItem.bind(this);
+    this.getToDoItem();
   }
 
-  //   this.apiUrl = '//57b1924b46b57d1100a3c3f8.mockapi.io/api/todos'
+  getToDoItem = () => {
+    const getURL = "http://5d6190ac5f64870014060505.mockapi.io/api/v1/mockData";
+    axios
+      .get(getURL)
+      .then(res => {
+        this.setState({ mockData: res.data });
+      })
+      .catch(error => {
+        console.log("Error fetching and parsing data", error);
+      });
+  };
 
   onSubmitHandle(event) {
     event.preventDefault();
+    const addItemUrl =
+      "http://5d6190ac5f64870014060505.mockapi.io/api/v1/mockData";
 
-    this.setState({
-      mockData: [
-        ...this.state.mockData,
-        {
-          id: Date.now(),
-          title: event.target.item.value,
-          done: false,
-          date: new Date()
-        }
-      ]
-    });
-
+    axios
+      .post(addItemUrl, {
+        id: Date.now(),
+        title: event.target.item.value,
+        done: false
+      })
+      .then(() => {
+        this.getToDoItem();
+      })
+      .catch(error => {
+        console.log("Error fetching and parsing data", error);
+      });
     event.target.item.value = "";
   }
 
   onDeleteHandle() {
     let id = arguments[0];
-
-    this.setState({
-      mockData: this.state.mockData.filter(item => {
-        if (item.id !== id) {
-          return item;
-        }
+    const deleteItemUrl =
+      "http://5d6190ac5f64870014060505.mockapi.io/api/v1/mockData/" + id;
+    axios
+      .delete(deleteItemUrl)
+      .then(() => {
+        this.getToDoItem();
       })
-    });
+      .catch(error => {
+        console.log("Error fetching and parsing data", error);
+      });
   }
 
   onEditHandle(event) {
@@ -60,36 +77,45 @@ class Todo extends Component {
 
   onUpdateHandle(event) {
     event.preventDefault();
+    let id = event.target.updatedItem.id;
+    let updatedItem = "";
+    const updateItemUrl =
+      "http://5d6190ac5f64870014060505.mockapi.io/api/v1/mockData/" + id;
 
-    this.setState({
-      mockData: this.state.mockData.map(item => {
-        if (item.id === this.state.id) {
-          item["title"] = event.target.updatedItem.value;
-          return item;
-        }
+    updatedItem = {
+      title: event.target.updatedItem.value,
+      done: false
+    };
 
-        return item;
+    axios
+      .put(updateItemUrl, updatedItem)
+      .then(() => {
+        this.getToDoItem();
       })
-    });
-
+      .catch(error => {
+        console.log("Error fetching and parsing data", error);
+      });
     this.setState({
       edit: false
     });
   }
 
-  onCompleteHandle() {
-    let id = arguments[0];
-
-    this.setState({
-      mockData: this.state.mockData.map(item => {
-        if (item.id === id) {
-          item["done"] = true;
-          return item;
-        }
-
-        return item;
-      })
-    });
+  onCompleteHandle(isDone) {
+    let id = isDone;
+    const updateItemUrl =
+      "http://5d6190ac5f64870014060505.mockapi.io/api/v1/mockData/" + id;
+    if (isDone) {
+      axios
+        .put(updateItemUrl, { done: true })
+        .then(() => {
+          this.getToDoItem();
+        })
+        .catch(error => {
+          console.log("Error fetching and parsing data", error);
+        });
+    } else {
+      this.getToDoItem();
+    }
   }
 
   renderEditForm() {
@@ -98,6 +124,7 @@ class Todo extends Component {
         <div className="todo-input-wrapper">
           <form onSubmit={this.onUpdateHandle.bind(this)}>
             <input
+              id={this.state.id}
               type="text"
               name="updatedItem"
               className="item"
@@ -128,6 +155,7 @@ class Todo extends Component {
           {this.renderEditForm()}
           <div className="todo-list-wrapper">
             <ul className="item-wrapper">
+              {Object.keys(this.state).map(i => this.state[i.title])}
               {this.state.mockData.map(item => (
                 <li
                   key={item.id}
@@ -153,8 +181,13 @@ class Todo extends Component {
                         <span className="icon-update"></span>
                       </button>
                       <button
-                        onClick={this.onCompleteHandle.bind(this, item.id)}
+                        onClick={this.onCompleteHandle.bind(
+                          this,
+                          (item.done = true),
+                          item.id
+                        )}
                         className="btn btn-item"
+                        type="submit"
                       >
                         <span className="icon-complete"></span>
                       </button>
@@ -169,5 +202,7 @@ class Todo extends Component {
     );
   }
 }
-
+Todo.propTypes = {
+  getToDoItem: PropTypes.func
+};
 export default Todo;
