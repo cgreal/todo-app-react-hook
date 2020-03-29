@@ -1,0 +1,20 @@
+.lazyload-placeholder {
+	animation: 1.5s ease infinite pulse;
+}
+
+@keyframes pulse {
+	0% {
+		background: #eee;
+		transform: scale(1);
+	}
+
+	50% {
+		background: darken(#eee, 5%);
+		transform: scale(1.015);
+	}
+
+	100% {
+		background: #eee;
+		transform: scale(1);
+	}
+}

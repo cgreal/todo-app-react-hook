@@ -1,0 +1,229 @@
+@import './mixins';
+@import '../../../node_modules/bootstrap/scss/tables';
+
+html {
+    font-family: sofia-pro, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    -ms-overflow-style: scrollbar;
+    -webkit-tap-highlight-color: transparent;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background-color: #efefef;
+    color: #000;
+    font-family: sofia-pro, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    line-height: 1.42857143;
+    margin: 0;
+    min-height: 100vh;
+    padding: 0;
+    &.noscroll {
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+    }
+    &.print {
+        @media print {
+            background-color: #fff;
+            min-height: auto;
+            overflow: visible;
+        }
+    }
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+input,
+button,
+textarea,
+select {
+    -webkit-appearance: none;
+    color: #000;
+    font-family: sofia-pro, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    margin: 0;
+}
+
+textarea {
+    resize: none;
+}
+
+small {
+    font-size: 12px;
+}
+
+.input,
+textarea,
+input[type='text'],
+input[type='date'],
+input[type='number'],
+input[type='password'],
+input[type='email'],
+input[type='tel'] {
+    border: solid 1px #ddd;
+    font-size: 14px;
+    padding: 4px 10px 6px;
+    transition: border-color 0.3s;
+    &[required].validate-error {
+        border-color: #ea6a6a;
+        &:hover,
+        &:focus {
+            border-color: #ea6a6a;
+        }
+    }
+    &:disabled {
+        background: #efefef;
+        color: #000;
+        cursor: not-allowed;
+        &:hover,
+        &:focus {
+            background: #efefef;
+            border-color: #ddd;
+            color: #000;
+        }
+    }
+    &:hover,
+    &:focus {
+        border-color: #aaa;
+    }
+    &::placeholder {
+        color: #ccc;
+    }
+}
+.mysettings {
+    .input,
+    textarea,
+    input[type='text'],
+    input[type='number'],
+    input[type='password'],
+    input[type='email'],
+    input[type='tel'] {
+        &:disabled {
+            opacity: 1;
+            -webkit-text-fill-color: #000;
+        }
+    }
+}
+
+select {
+    background-color: #fff;
+    border: solid 1px #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 4px 25px 6px 10px;
+    transition: border-color 0.3s;
+    width: 100%;
+    &:hover,
+    &:focus {
+        border-color: #aaa;
+    }
+}
+
+button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-size: inherit;
+    line-height: 1.42857143;
+    padding: 0;
+    &:focus {
+        outline: 0;
+    }
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container,
+.relative {
+    position: relative;
+}
+
+:focus {
+    outline: 0;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    main {
+        flex-grow: 1;
+        z-index: 2;
+    }
+}
+
+hr {
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+body.is-modal {
+    overflow: hidden;
+    .header-search,
+    .web-header-cat {
+        z-index: 0;
+    }
+    .mobile-header-cat,
+    .header {
+        position: inherit;
+        z-index: 1;
+    }
+}
+/* data-test="data-test13" */
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+        .text#{$infix}-left {
+            text-align: left !important;
+        }
+        .text#{$infix}-right {
+            text-align: right !important;
+        }
+        .text#{$infix}-center {
+            text-align: center !important;
+        }
+    }
+}
+
+@import "./ui";
+@import './lazyload';

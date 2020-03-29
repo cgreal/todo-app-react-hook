@@ -1,0 +1,26 @@
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
+@import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
+@import '../../../node_modules/bootstrap/scss/mixins/gradients';
+@import '../../../node_modules/bootstrap/scss/mixins/grid-framework';
+@import '../../../node_modules/bootstrap/scss/mixins/hover';
+@import '../../../node_modules/bootstrap/scss/mixins/table-row';
+
+// custom mixings go here
+@mixin line-clamp($count) {
+    @if $count == 1 {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    } @else {
+        display: block;
+        display: -webkit-box;
+        display: -moz-box;
+        -moz-box-orient: vertical;
+        overflow: hidden;
+        white-space: inherit;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: $count;
+    }
+}
